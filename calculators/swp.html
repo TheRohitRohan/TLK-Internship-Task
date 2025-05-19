@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWP Calculator - Calculate Systematic Withdrawal Plan</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container sip-calc-layout">
+        <div class="sip-main">
+            <div class="sip-calc-card sip-calc-grid compact">
+                <div class="sip-calc-left">
+                    <div class="sip-inputs">
+                        <div class="sip-input-group">
+                            <label>Corpus amount</label>
+                            <div class="sip-slider-row">
+                                <input type="range" id="corpusAmount" min="100000" max="10000000" step="10000" value="1000000">
+                                <span class="sip-value-bubble" id="corpusAmountValue"></span>
+                            </div>
+                        </div>
+                        <div class="sip-input-group">
+                            <label>Monthly withdrawal</label>
+                            <div class="sip-slider-row">
+                                <input type="range" id="monthlyWithdrawal" min="1000" max="100000" step="1000" value="10000">
+                                <span class="sip-value-bubble" id="monthlyWithdrawalValue"></span>
+                            </div>
+                        </div>
+                        <div class="sip-input-group">
+                            <label>Expected return rate (p.a)</label>
+                            <div class="sip-slider-row">
+                                <input type="range" id="expectedReturn" min="1" max="20" step="0.1" value="12">
+                                <span class="sip-value-bubble" id="expectedReturnValue"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sip-calc-right">
+                    <div class="sip-legend">
+                        <div><span class="sip-legend-box invested"></span>Corpus amount</div>
+                        <div><span class="sip-legend-box returns"></span>Total withdrawals</div>
+                    </div>
+                    <canvas id="swpChart" width="90" height="90"></canvas>
+                </div>
+                <div class="sip-summary sip-summary-below">
+                    <div><span>Corpus amount</span><strong id="corpusAmount">₹0</strong></div>
+                    <div><span>Total withdrawals</span><strong id="totalWithdrawals">₹0</strong></div>
+                    <div><span>Remaining corpus</span><strong id="remainingCorpus">₹0</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/swp.js"></script>
+</body>
+</html> 

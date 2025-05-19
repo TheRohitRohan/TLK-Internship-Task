@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MF Returns Calculator - Calculate Mutual Fund Returns</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container sip-calc-layout">
+        <div class="sip-main">
+            <div class="sip-calc-card sip-calc-grid compact">
+                <div class="sip-calc-left">
+                    <div class="sip-inputs">
+                        <div class="sip-input-group">
+                            <label>Investment amount</label>
+                            <div class="sip-slider-row">
+                                <input type="range" id="investmentAmount" min="1000" max="1000000" step="1000" value="100000">
+                                <span class="sip-value-bubble" id="investmentAmountValue"></span>
+                            </div>
+                        </div>
+                        <div class="sip-input-group">
+                            <label>Current value</label>
+                            <div class="sip-slider-row">
+                                <input type="range" id="currentValue" min="1000" max="10000000" step="1000" value="150000">
+                                <span class="sip-value-bubble" id="currentValueValue"></span>
+                            </div>
+                        </div>
+                        <div class="sip-input-group">
+                            <label>Investment period (years)</label>
+                            <div class="sip-slider-row">
+                                <input type="range" id="timePeriod" min="1" max="40" step="1" value="5">
+                                <span class="sip-value-bubble" id="timePeriodValue"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sip-calc-right">
+                    <div class="sip-legend">
+                        <div><span class="sip-legend-box invested"></span>Investment amount</div>
+                        <div><span class="sip-legend-box returns"></span>Returns</div>
+                    </div>
+                    <canvas id="mfChart" width="90" height="90"></canvas>
+                </div>
+                <div class="sip-summary sip-summary-below">
+                    <div><span>Investment amount</span><strong id="investedAmount">₹0</strong></div>
+                    <div><span>Returns</span><strong id="returns">₹0</strong></div>
+                    <div><span>Total value</span><strong id="totalValue">₹0</strong></div>
+                    <div><span>Annualized return</span><strong id="annualizedReturn">0%</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/mf.js"></script>
+</body>
+</html> 

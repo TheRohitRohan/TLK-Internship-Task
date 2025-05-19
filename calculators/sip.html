@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIP Calculator</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container sip-calc-layout">
+        <div class="sip-main">
+            <div class="sip-calc-card sip-calc-grid compact">
+                <div class="sip-calc-left">
+                    <div class="sip-inputs">
+                        <div class="sip-input-group">
+                            <label>Monthly investment</label>
+                            <div class="sip-slider-row">
+                                <input type="range" id="monthlyInvestment" min="500" max="100000" step="500" value="25000">
+                                <span class="sip-value-bubble" id="monthlyInvestmentValue"></span>
+                            </div>
+                        </div>
+                        <div class="sip-input-group">
+                            <label>Expected return rate (p.a)</label>
+                            <div class="sip-slider-row">
+                                <input type="range" id="expectedReturn" min="1" max="20" step="0.1" value="12">
+                                <span class="sip-value-bubble" id="expectedReturnValue"></span>
+                            </div>
+                        </div>
+                        <div class="sip-input-group">
+                            <label>Time period</label>
+                            <div class="sip-slider-row">
+                                <input type="range" id="timePeriod" min="1" max="40" step="1" value="10">
+                                <span class="sip-value-bubble" id="timePeriodValue"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sip-calc-right">
+                    <div class="sip-legend">
+                        <div><span class="sip-legend-box invested"></span>Invested amount</div>
+                        <div><span class="sip-legend-box returns"></span>Est. returns</div>
+                    </div>
+                    <canvas id="sipChart" width="90" height="90"></canvas>
+                </div>
+                <div class="sip-summary sip-summary-below">
+                    <div><span>Invested amount</span><strong id="investedAmount">₹0</strong></div>
+                    <div><span>Est. returns</span><strong id="estReturns">₹0</strong></div>
+                    <div><span>Total value</span><strong id="totalValue">₹0</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/sip.js"></script>
+</body>
+</html> 
