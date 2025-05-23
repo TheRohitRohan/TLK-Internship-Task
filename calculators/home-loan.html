@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Loan Calculator</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="calc-layout">
+        <div class="calc-card">
+            <div class="calc-inputs">
+                <div class="input-group">
+                    <label>Loan amount</label>
+                    <div class="slider-row">
+                        <input type="range" id="loanAmount" min="100000" max="10000000" step="10000" value="3000000">
+                        <span class="value-bubble" id="loanAmountValue"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Interest rate (p.a)</label>
+                    <div class="slider-row">
+                        <input type="range" id="interestRate" min="1" max="20" step="0.1" value="8.5">
+                        <span class="value-bubble" id="interestRateValue"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Loan tenure (years)</label>
+                    <div class="slider-row">
+                        <input type="range" id="loanTenure" min="1" max="30" step="1" value="20">
+                        <span class="value-bubble" id="loanTenureValue"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="calc-summary">
+                <div>
+                    <span>Monthly EMI</span>
+                    <strong id="monthlyEMI">₹0</strong>
+                </div>
+                <div>
+                    <span>Total interest</span>
+                    <strong id="totalInterest">₹0</strong>
+                </div>
+                <div>
+                    <span>Total payment</span>
+                    <strong id="totalPayment">₹0</strong>
+                </div>
+            </div>
+        </div>
+        <div class="monthly-breakdown">
+            <h3>Yearly Breakdown</h3>
+            <div class="table-container">
+                <table id="yearlyTable">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Principal Paid</th>
+                            <th>Interest Paid</th>
+                            <th>Remaining Loan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="../js/home-loan.js"></script>
+</body>
+</html> 

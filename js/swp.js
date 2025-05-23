@@ -8,113 +8,106 @@ function formatINR(num) {
 }
 
 // DOM Elements
-const corpusInput = document.getElementById('corpusAmount');
-const withdrawalInput = document.getElementById('monthlyWithdrawal');
-const returnInput = document.getElementById('expectedReturn');
+const totalInvestmentInput = document.getElementById('totalInvestment');
+const monthlyWithdrawalInput = document.getElementById('monthlyWithdrawal');
+const expectedReturnInput = document.getElementById('expectedReturn');
+const timePeriodInput = document.getElementById('timePeriod');
 
-const corpusBubble = document.getElementById('corpusAmountValue');
-const withdrawalBubble = document.getElementById('monthlyWithdrawalValue');
-const returnBubble = document.getElementById('expectedReturnValue');
+const totalInvestmentBubble = document.getElementById('totalInvestmentValue');
+const monthlyWithdrawalBubble = document.getElementById('monthlyWithdrawalValue');
+const expectedReturnBubble = document.getElementById('expectedReturnValue');
+const timePeriodBubble = document.getElementById('timePeriodValue');
 
-const corpusAmountEl = document.getElementById('corpusAmount');
+const totalInvestmentEl = document.getElementById('totalInvestment');
 const totalWithdrawalsEl = document.getElementById('totalWithdrawals');
-const remainingCorpusEl = document.getElementById('remainingCorpus');
+const finalValueEl = document.getElementById('finalValue');
 
-let chart;
+const monthlyTableBody = document.querySelector('#monthlyTable tbody');
 
 function updateBubbles() {
-    corpusBubble.className = 'sip-value-bubble money';
-    corpusBubble.innerHTML = `<span class='bubble-prefix'>₹</span><span class='bubble-number'>${parseInt(corpusInput.value).toLocaleString('en-IN')}</span>`;
+    totalInvestmentBubble.className = 'swp-value-bubble';
+    totalInvestmentBubble.innerHTML = `<span class='bubble-prefix'>₹</span><span class='bubble-number'>${parseInt(totalInvestmentInput.value).toLocaleString('en-IN')}</span>`;
     
-    withdrawalBubble.className = 'sip-value-bubble money';
-    withdrawalBubble.innerHTML = `<span class='bubble-prefix'>₹</span><span class='bubble-number'>${parseInt(withdrawalInput.value).toLocaleString('en-IN')}</span>`;
+    monthlyWithdrawalBubble.className = 'swp-value-bubble';
+    monthlyWithdrawalBubble.innerHTML = `<span class='bubble-prefix'>₹</span><span class='bubble-number'>${parseInt(monthlyWithdrawalInput.value).toLocaleString('en-IN')}</span>`;
     
-    returnBubble.className = 'sip-value-bubble percent';
-    returnBubble.innerHTML = `<span class='bubble-number'>${parseFloat(returnInput.value).toFixed(1)}</span><span class='bubble-suffix'>%</span>`;
+    expectedReturnBubble.className = 'swp-value-bubble';
+    expectedReturnBubble.innerHTML = `<span class='bubble-number'>${parseFloat(expectedReturnInput.value).toFixed(1)}</span><span class='bubble-suffix'>%</span>`;
+    
+    timePeriodBubble.className = 'swp-value-bubble';
+    timePeriodBubble.innerHTML = `<span class='bubble-number'>${parseInt(timePeriodInput.value)}</span><span class='bubble-suffix'>Yr</span>`;
 }
 
 function calculateSWP() {
-    const corpus = parseFloat(corpusInput.value);
-    const monthlyWithdrawal = parseFloat(withdrawalInput.value);
-    const annualReturn = parseFloat(returnInput.value) / 100;
-    const monthlyReturn = annualReturn / 12;
+    const totalInvestment = parseFloat(totalInvestmentInput.value);
+    const monthlyWithdrawal = parseFloat(monthlyWithdrawalInput.value);
+    const annualReturn = parseFloat(expectedReturnInput.value) / 100;
+    const months = parseInt(timePeriodInput.value) * 12;
     
-    // Calculate how long the corpus will last
-    let remainingCorpus = corpus;
+    let balance = totalInvestment;
     let totalWithdrawals = 0;
-    let months = 0;
+    let monthlyBreakdown = [];
     
-    while (remainingCorpus > 0 && months < 600) { // Max 50 years
-        remainingCorpus = remainingCorpus * (1 + monthlyReturn) - monthlyWithdrawal;
+    for (let month = 1; month <= months; month++) {
+        const openingBalance = balance;
+        const interestEarned = balance * (annualReturn / 12);
+        balance = openingBalance + interestEarned - monthlyWithdrawal;
         totalWithdrawals += monthlyWithdrawal;
-        months++;
         
-        if (remainingCorpus < 0) {
-            remainingCorpus = 0;
-            break;
-        }
+        monthlyBreakdown.push({
+            month,
+            openingBalance,
+            withdrawal: monthlyWithdrawal,
+            interestEarned,
+            closingBalance: balance
+        });
+        
+        if (balance <= 0) break;
     }
     
     return {
-        corpus,
+        totalInvestment,
         totalWithdrawals,
-        remainingCorpus,
-        months
+        finalValue: balance > 0 ? balance : 0,
+        monthlyBreakdown
     };
 }
 
-function updateSummaryAndChart() {
-    const { corpus, totalWithdrawals, remainingCorpus } = calculateSWP();
-    
-    corpusAmountEl.textContent = formatINR(corpus);
-    totalWithdrawalsEl.textContent = formatINR(totalWithdrawals);
-    remainingCorpusEl.textContent = formatINR(remainingCorpus);
-
-    // Chart.js donut
-    const ctx = document.getElementById('swpChart').getContext('2d');
-    if (chart) chart.destroy();
-    chart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Corpus amount', 'Total withdrawals'],
-            datasets: [{
-                data: [corpus, totalWithdrawals],
-                backgroundColor: ['#e6fff7', '#3b82f6'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            cutout: '70%',
-            plugins: {
-                legend: {
-                    display: false,
-                    position: 'bottom',
-                    labels: {
-                        color: '#888',
-                        font: { size: 13 }
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return `${context.label}: ${formatINR(context.raw)}`;
-                        }
-                    }
-                }
-            }
-        }
+function updateMonthlyTable(breakdown) {
+    monthlyTableBody.innerHTML = '';
+    breakdown.forEach(month => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${month.month}</td>
+            <td>${formatINR(month.openingBalance)}</td>
+            <td>${formatINR(month.withdrawal)}</td>
+            <td>${formatINR(month.interestEarned)}</td>
+            <td>${formatINR(month.closingBalance)}</td>
+        `;
+        monthlyTableBody.appendChild(row);
     });
+}
+
+function updateSummary() {
+    const { totalInvestment, totalWithdrawals, finalValue, monthlyBreakdown } = calculateSWP();
+    
+    totalInvestmentEl.textContent = formatINR(totalInvestment);
+    totalWithdrawalsEl.textContent = formatINR(totalWithdrawals);
+    finalValueEl.textContent = formatINR(finalValue);
+    
+    updateMonthlyTable(monthlyBreakdown);
 }
 
 function handleInput() {
     updateBubbles();
-    updateSummaryAndChart();
+    updateSummary();
 }
 
 // Event Listeners
-corpusInput.addEventListener('input', handleInput);
-withdrawalInput.addEventListener('input', handleInput);
-returnInput.addEventListener('input', handleInput);
+totalInvestmentInput.addEventListener('input', handleInput);
+monthlyWithdrawalInput.addEventListener('input', handleInput);
+expectedReturnInput.addEventListener('input', handleInput);
+timePeriodInput.addEventListener('input', handleInput);
 
 // Editable value bubbles
 function makeEditable(bubble, input, type) {
@@ -123,9 +116,10 @@ function makeEditable(bubble, input, type) {
         bubble.classList.add('editing');
         let min = input.min, max = input.max, step = input.step;
         let valueStr = input.value;
-        let prefix = '', suffix = '', bubbleClass = '';
-        if (type === 'money') { valueStr = parseInt(valueStr); prefix = '<span class="bubble-prefix">₹</span>'; bubbleClass = 'sip-value-bubble money editing'; }
-        if (type === 'percent') { valueStr = parseFloat(valueStr).toFixed(1); suffix = '<span class="bubble-suffix">%</span>'; bubbleClass = 'sip-value-bubble percent editing'; }
+        let prefix = '', suffix = '', bubbleClass = 'swp-value-bubble editing';
+        if (type === 'money') { valueStr = parseInt(valueStr); prefix = '<span class="bubble-prefix">₹</span>'; }
+        if (type === 'percent') { valueStr = parseFloat(valueStr).toFixed(1); suffix = '<span class="bubble-suffix">%</span>'; }
+        if (type === 'years') { valueStr = parseInt(valueStr); suffix = '<span class="bubble-suffix">Yr</span>'; }
         bubble.className = bubbleClass;
         bubble.innerHTML = `${prefix}<input type="number" class="bubble-number" min="${min}" max="${max}" step="${step}" value="${valueStr}" />${suffix}`;
         const editInput = bubble.querySelector('input');
@@ -139,10 +133,13 @@ function makeEditable(bubble, input, type) {
             } else if (type === 'percent') {
                 newValue = Math.max(parseFloat(min), Math.min(parseFloat(max), parseFloat(newValue) || parseFloat(min)));
                 input.value = newValue;
+            } else if (type === 'years') {
+                newValue = Math.max(parseInt(min), Math.min(parseInt(max), parseInt(newValue) || parseInt(min)));
+                input.value = newValue;
             }
             bubble.classList.remove('editing');
             updateBubbles();
-            updateSummaryAndChart();
+            updateSummary();
         }
         editInput.addEventListener('blur', finishEdit);
         editInput.addEventListener('keydown', function (e) {
@@ -159,10 +156,11 @@ function makeEditable(bubble, input, type) {
 }
 
 // Make inputs editable
-makeEditable(corpusBubble, corpusInput, 'money');
-makeEditable(withdrawalBubble, withdrawalInput, 'money');
-makeEditable(returnBubble, returnInput, 'percent');
+makeEditable(totalInvestmentBubble, totalInvestmentInput, 'money');
+makeEditable(monthlyWithdrawalBubble, monthlyWithdrawalInput, 'money');
+makeEditable(expectedReturnBubble, expectedReturnInput, 'percent');
+makeEditable(timePeriodBubble, timePeriodInput, 'years');
 
 // Initial render
 updateBubbles();
-updateSummaryAndChart(); 
+updateSummary(); 

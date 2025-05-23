@@ -6,22 +6,54 @@
     <title>EPF Calculator</title>
     <link rel="stylesheet" href="../css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>EPF Calculator</h1>
-            <a href="../index.html">&larr; Back to Calculators</a>
-        </header>
-        <div class="calculator-form">
-            <form>
-                <p style="color:#aaa;text-align:center;">Coming soon...</p>
-            </form>
-        </div>
-        <div class="calculator-info">
-            <h3>What is EPF?</h3>
-            <p>Employee's Provident Fund (EPF) is a retirement savings scheme for employees, with contributions from both employer and employee.</p>
+    <div class="container sip-calc-layout">
+        <div class="sip-main">
+            <div class="sip-calc-card sip-calc-grid compact">
+                <div class="sip-calc-left">
+                    <div class="sip-inputs">
+                        <div class="sip-input-group">
+                            <label>Basic salary + DA</label>
+                            <div class="sip-slider-row">
+                                <input type="range" id="basicSalary" min="5000" max="1000000" step="1000" value="50000">
+                                <span class="sip-value-bubble" id="basicSalaryValue"></span>
+                            </div>
+                        </div>
+                        <div class="sip-input-group">
+                            <label>Interest rate (p.a)</label>
+                            <div class="sip-slider-row">
+                                <input type="range" id="interestRate" min="1" max="10" step="0.1" value="8.15">
+                                <span class="sip-value-bubble" id="interestRateValue"></span>
+                            </div>
+                        </div>
+                        <div class="sip-input-group">
+                            <label>Time period</label>
+                            <div class="sip-slider-row">
+                                <input type="range" id="timePeriod" min="1" max="40" step="1" value="20">
+                                <span class="sip-value-bubble" id="timePeriodValue"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sip-calc-right">
+                    <div class="sip-legend">
+                        <div><span class="sip-legend-box invested"></span>Employee contribution</div>
+                        <div><span class="sip-legend-box returns"></span>Employer contribution</div>
+                        <div><span class="sip-legend-box interest"></span>Interest earned</div>
+                    </div>
+                    <canvas id="epfChart" width="90" height="90"></canvas>
+                </div>
+                <div class="sip-summary sip-summary-below">
+                    <div><span>Employee contribution</span><strong id="employeeContribution">₹0</strong></div>
+                    <div><span>Employer contribution</span><strong id="employerContribution">₹0</strong></div>
+                    <div><span>Interest earned</span><strong id="interestEarned">₹0</strong></div>
+                    <div><span>Total corpus</span><strong id="totalCorpus">₹0</strong></div>
+                </div>
+            </div>
         </div>
     </div>
+    <script src="../js/epf.js"></script>
 </body>
 </html> 

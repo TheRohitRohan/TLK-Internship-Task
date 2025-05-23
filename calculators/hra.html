@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRA Calculator</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="calc-layout">
+        <div class="calc-card">
+            <div class="calc-inputs">
+                <div class="input-group">
+                    <label>Basic salary</label>
+                    <div class="slider-row">
+                        <input type="range" id="basicSalary" min="10000" max="1000000" step="1000" value="50000">
+                        <span class="value-bubble" id="basicSalaryValue"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>HRA received</label>
+                    <div class="slider-row">
+                        <input type="range" id="hraReceived" min="0" max="500000" step="1000" value="20000">
+                        <span class="value-bubble" id="hraReceivedValue"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Rent paid</label>
+                    <div class="slider-row">
+                        <input type="range" id="rentPaid" min="0" max="500000" step="1000" value="15000">
+                        <span class="value-bubble" id="rentPaidValue"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Metro city</label>
+                    <div class="slider-row">
+                        <select id="metroCity" class="select-input">
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="calc-summary">
+                <div>
+                    <span>HRA exemption</span>
+                    <strong id="hraExemption">₹0</strong>
+                </div>
+                <div>
+                    <span>Taxable HRA</span>
+                    <strong id="taxableHra">₹0</strong>
+                </div>
+                <div>
+                    <span>Annual tax saving</span>
+                    <strong id="annualTaxSaving">₹0</strong>
+                </div>
+            </div>
+        </div>
+        <div class="monthly-breakdown">
+            <h3>HRA Calculation Details</h3>
+            <div class="table-container">
+                <table id="hraTable">
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="../js/hra.js"></script>
+</body>
+</html> 

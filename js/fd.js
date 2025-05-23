@@ -8,65 +8,77 @@ function formatINR(num) {
 }
 
 // DOM Elements
-const investmentInput = document.getElementById('investmentAmount');
-const returnInput = document.getElementById('expectedReturn');
-const periodInput = document.getElementById('timePeriod');
-const expenseInput = document.getElementById('expenseRatio');
+const investmentAmountInput = document.getElementById('investmentAmount');
+const interestRateInput = document.getElementById('interestRate');
+const timePeriodInput = document.getElementById('timePeriod');
+const interestPayoutSelect = document.getElementById('interestPayout');
 
-const investmentBubble = document.getElementById('investmentAmountValue');
-const returnBubble = document.getElementById('expectedReturnValue');
-const periodBubble = document.getElementById('timePeriodValue');
-const expenseBubble = document.getElementById('expenseRatioValue');
+const investmentAmountBubble = document.getElementById('investmentAmountValue');
+const interestRateBubble = document.getElementById('interestRateValue');
+const timePeriodBubble = document.getElementById('timePeriodValue');
 
-const investedAmountEl = document.getElementById('investedAmount');
-const estReturnsEl = document.getElementById('estReturns');
-const totalValueEl = document.getElementById('totalValue');
+const principalAmountEl = document.getElementById('principalAmount');
+const interestEarnedEl = document.getElementById('interestEarned');
+const maturityValueEl = document.getElementById('maturityValue');
 
 let chart;
 
 function updateBubbles() {
-    investmentBubble.className = 'sip-value-bubble money';
-    investmentBubble.innerHTML = `<span class='bubble-prefix'>₹</span><span class='bubble-number'>${parseInt(investmentInput.value).toLocaleString('en-IN')}</span>`;
+    investmentAmountBubble.className = 'sip-value-bubble money';
+    investmentAmountBubble.innerHTML = `<span class='bubble-prefix'>₹</span><span class='bubble-number'>${parseInt(investmentAmountInput.value).toLocaleString('en-IN')}</span>`;
     
-    returnBubble.className = 'sip-value-bubble percent';
-    returnBubble.innerHTML = `<span class='bubble-number'>${parseFloat(returnInput.value).toFixed(1)}</span><span class='bubble-suffix'>%</span>`;
+    interestRateBubble.className = 'sip-value-bubble percent';
+    interestRateBubble.innerHTML = `<span class='bubble-number'>${parseFloat(interestRateInput.value).toFixed(1)}</span><span class='bubble-suffix'>%</span>`;
     
-    periodBubble.className = 'sip-value-bubble years';
-    periodBubble.innerHTML = `<span class='bubble-number'>${parseInt(periodInput.value)}</span><span class='bubble-suffix'>Yr</span>`;
-    
-    expenseBubble.className = 'sip-value-bubble percent';
-    expenseBubble.innerHTML = `<span class='bubble-number'>${parseFloat(expenseInput.value).toFixed(1)}</span><span class='bubble-suffix'>%</span>`;
+    timePeriodBubble.className = 'sip-value-bubble years';
+    timePeriodBubble.innerHTML = `<span class='bubble-number'>${parseInt(timePeriodInput.value)}</span><span class='bubble-suffix'>Yr</span>`;
 }
 
-function calculateMF() {
-    const P = parseFloat(investmentInput.value);
-    const r = (parseFloat(returnInput.value) - parseFloat(expenseInput.value)) / 100;
-    const t = parseInt(periodInput.value);
+function calculateFD() {
+    const principal = parseFloat(investmentAmountInput.value);
+    const interestRate = parseFloat(interestRateInput.value) / 100;
+    const years = parseInt(timePeriodInput.value);
+    const payoutFrequency = interestPayoutSelect.value;
     
-    // Mutual Fund formula with expense ratio consideration
-    const FV = P * Math.pow(1 + r, t);
-    const invested = P;
-    const returns = FV - invested;
+    let n; // Number of times interest is compounded per year
+    switch (payoutFrequency) {
+        case 'quarterly':
+            n = 4;
+            break;
+        case 'halfYearly':
+            n = 2;
+            break;
+        case 'yearly':
+            n = 1;
+            break;
+        case 'maturity':
+            n = 1;
+            break;
+    }
     
-    return { invested, returns, FV };
+    // Calculate maturity value using compound interest formula
+    const maturityValue = principal * Math.pow(1 + interestRate / n, n * years);
+    const interestEarned = maturityValue - principal;
+    
+    return { principal, interestEarned, maturityValue };
 }
 
 function updateSummaryAndChart() {
-    const { invested, returns, FV } = calculateMF();
+    const { principal, interestEarned, maturityValue } = calculateFD();
     
-    investedAmountEl.textContent = formatINR(invested);
-    estReturnsEl.textContent = formatINR(returns);
-    totalValueEl.textContent = formatINR(FV);
+    principalAmountEl.textContent = formatINR(principal);
+    interestEarnedEl.textContent = formatINR(interestEarned);
+    maturityValueEl.textContent = formatINR(maturityValue);
 
     // Chart.js donut
-    const ctx = document.getElementById('mfChart').getContext('2d');
+    const ctx = document.getElementById('fdChart').getContext('2d');
     if (chart) chart.destroy();
     chart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['Invested amount', 'Est. returns'],
+            labels: ['Principal amount', 'Interest earned'],
             datasets: [{
-                data: [invested, returns],
+                data: [principal, interestEarned],
                 backgroundColor: ['#e6fff7', '#3b82f6'],
                 borderWidth: 0
             }]
@@ -100,10 +112,10 @@ function handleInput() {
 }
 
 // Event Listeners
-investmentInput.addEventListener('input', handleInput);
-returnInput.addEventListener('input', handleInput);
-periodInput.addEventListener('input', handleInput);
-expenseInput.addEventListener('input', handleInput);
+investmentAmountInput.addEventListener('input', handleInput);
+interestRateInput.addEventListener('input', handleInput);
+timePeriodInput.addEventListener('input', handleInput);
+interestPayoutSelect.addEventListener('change', handleInput);
 
 // Editable value bubbles
 function makeEditable(bubble, input, type) {
@@ -152,10 +164,9 @@ function makeEditable(bubble, input, type) {
 }
 
 // Make inputs editable
-makeEditable(investmentBubble, investmentInput, 'money');
-makeEditable(returnBubble, returnInput, 'percent');
-makeEditable(periodBubble, periodInput, 'years');
-makeEditable(expenseBubble, expenseInput, 'percent');
+makeEditable(investmentAmountBubble, investmentAmountInput, 'money');
+makeEditable(interestRateBubble, interestRateInput, 'percent');
+makeEditable(timePeriodBubble, timePeriodInput, 'years');
 
 // Initial render
 updateBubbles();

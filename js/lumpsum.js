@@ -36,10 +36,10 @@ function updateBubbles() {
 function calculateLumpsum() {
     const P = parseFloat(investmentInput.value);
     const r = parseFloat(returnInput.value) / 100;
-    const n = parseInt(periodInput.value);
+    const t = parseInt(periodInput.value);
     
-    // Lumpsum formula
-    const FV = P * Math.pow(1 + r, n);
+    // Lumpsum formula: A = P(1 + r)^t
+    const FV = P * Math.pow(1 + r, t);
     const invested = P;
     const returns = FV - invested;
     

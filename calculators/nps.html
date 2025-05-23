@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPS Calculator</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="calc-layout">
+        <div class="calc-card">
+            <div class="calc-inputs">
+                <div class="input-group">
+                    <label>Monthly contribution</label>
+                    <div class="slider-row">
+                        <input type="range" id="monthlyContribution" min="500" max="50000" step="500" value="5000">
+                        <span class="value-bubble" id="monthlyContributionValue"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Expected return rate (p.a)</label>
+                    <div class="slider-row">
+                        <input type="range" id="expectedReturn" min="1" max="15" step="0.1" value="8">
+                        <span class="value-bubble" id="expectedReturnValue"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Current age</label>
+                    <div class="slider-row">
+                        <input type="range" id="currentAge" min="18" max="60" step="1" value="30">
+                        <span class="value-bubble" id="currentAgeValue"></span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Retirement age</label>
+                    <div class="slider-row">
+                        <input type="range" id="retirementAge" min="60" max="70" step="1" value="60">
+                        <span class="value-bubble" id="retirementAgeValue"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="calc-summary">
+                <div>
+                    <span>Total contribution</span>
+                    <strong id="totalContribution">₹0</strong>
+                </div>
+                <div>
+                    <span>Total returns</span>
+                    <strong id="totalReturns">₹0</strong>
+                </div>
+                <div>
+                    <span>Corpus at retirement</span>
+                    <strong id="corpusAtRetirement">₹0</strong>
+                </div>
+            </div>
+        </div>
+        <div class="monthly-breakdown">
+            <h3>Yearly Breakdown</h3>
+            <div class="table-container">
+                <table id="yearlyTable">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Age</th>
+                            <th>Contribution</th>
+                            <th>Interest Earned</th>
+                            <th>Total Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="../js/nps.js"></script>
+</body>
+</html> 

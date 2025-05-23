@@ -2,13 +2,90 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
     background-color: #f5f5f5;
     color: #333;
     line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px 0;
+}
+
+header h1 {
+    font-size: 32px;
+    font-weight: 600;
+    color: #333;
+}
+
+.calculator-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.calculator-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.calculator-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.calculator-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.calculator-card p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .calculator-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    header h1 {
+        font-size: 28px;
+    }
+
+    .calculator-card {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .calculator-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        padding: 15px;
+    }
 }
 
 .container {
@@ -664,4 +741,53 @@ button:hover {
 
 .sip-calc-bottom, .sip-invest-btn {
     display: none !important;
+}
+
+/* Monthly Breakdown Table Styles */
+.monthly-breakdown {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.monthly-breakdown h3 {
+    margin: 0 0 1rem;
+    color: #1f2937;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+#monthlyTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+#monthlyTable th,
+#monthlyTable td {
+    padding: 0.75rem;
+    text-align: right;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+#monthlyTable th {
+    background: #f9fafb;
+    font-weight: 500;
+    color: #4b5563;
+    text-align: right;
+}
+
+#monthlyTable th:first-child,
+#monthlyTable td:first-child {
+    text-align: left;
+}
+
+#monthlyTable tbody tr:hover {
+    background: #f9fafb;
 }
